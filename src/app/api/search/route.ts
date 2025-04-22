@@ -1,8 +1,10 @@
-//route.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams; //req.nextUrl.searchParams retrieves the URL's query parameters as a URLSearchParams object.
+  //The req.nextUrl property contains a URL object for the request.
+  //The searchParams property is an instance of URLSearchParams, which is a built‑in JavaScript class for working with the query string of a URL
+  //Purpose: To easily extract any parameter passed in the query string. For this route,we need to extract at least imageUrl (and optionally pageToken, hl)
 
   const imageUrl = searchParams.get("imageUrl"); //searchParams.get('imageUrl') extracts the value for the imageUrl parameter from the query string.
 
@@ -15,9 +17,6 @@ export async function GET(req: NextRequest) {
   }
 
   const apiKey = process.env.SERP_API_KEY; //retrieves the value of the environment variable SERP_API_KEY(the one set in our environment)
-
-  //change
-  // console.log("API Key first 4 chars:", apiKey?.substring(0, 4));
 
   if (!apiKey) {
     return NextResponse.json(

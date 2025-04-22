@@ -1,4 +1,3 @@
-//ResultsDisplay.tsx
 "use client";
 
 import {
