@@ -58,6 +58,11 @@ const ResultsDisplay: React.FC<ResultDisplayProps> = ({ query }) => {
       queryKey: ["googleLens", query, pageToken],
       queryFn: fetchResults,
       enabled: !!query,
+      // Additional query options to prevent automatic refetching
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: 1,
     });
 
   if (isLoading) {
