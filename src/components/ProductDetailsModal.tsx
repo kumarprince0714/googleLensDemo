@@ -26,7 +26,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
   const isVisualMatch = (
     item: VisualMatch | ExactMatch
   ): item is VisualMatch => {
-    return "related_searches" in item || "original" in item;
+    return "original" in item; // Only check for 'original' since it's documented
   };
 
   return (
@@ -82,6 +82,19 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
               </div>
             )}
 
+            {product.source_icon && (
+              <div>
+                <div className="relative h-8 w-8">
+                  <Image
+                    src={product.source_icon}
+                    alt="Source icon"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            )}
+
             {product.link && (
               <div>
                 <h3 className="font-medium text-gray-700">Link</h3>
@@ -93,13 +106,6 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                 >
                   {product.link}
                 </a>
-              </div>
-            )}
-
-            {product.description && (
-              <div>
-                <h3 className="font-medium text-gray-700">Description</h3>
-                <p className="text-gray-600">{product.description}</p>
               </div>
             )}
 
@@ -115,130 +121,31 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                   </div>
                 )}
 
-                {product.brand && (
+                {product.original && (
                   <div>
-                    <h3 className="font-medium text-gray-700">Brand</h3>
-                    <p>{product.brand}</p>
-                  </div>
-                )}
-
-                {product.rating && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Rating</h3>
-                    <div className="flex items-center">
-                      <span className="text-amber-500">
-                        {product.rating.value}/5
-                      </span>
-                      <span className="text-gray-500 ml-2">
-                        ({product.rating.count} reviews)
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {product.availability && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Availability</h3>
-                    <p>{product.availability}</p>
-                  </div>
-                )}
-
-                {product.seller && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Seller</h3>
-                    <p>{product.seller}</p>
+                    <h3 className="font-medium text-gray-700">
+                      Original Image
+                    </h3>
+                    <a
+                      href={product.original}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline break-words text-sm"
+                    >
+                      View Original
+                    </a>
                   </div>
                 )}
               </>
             )}
 
             {/* Exact Match specific details */}
-            {!isVisualMatch(product) && (
-              <>
-                {product.date && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Date</h3>
-                    <p>{product.date}</p>
-                  </div>
-                )}
-
-                {product.author && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Author</h3>
-                    <p>{product.author}</p>
-                  </div>
-                )}
-
-                {product.website_name && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Website</h3>
-                    <p>{product.website_name}</p>
-                  </div>
-                )}
-
-                {product.category && (
-                  <div>
-                    <h3 className="font-medium text-gray-700">Category</h3>
-                    <p>{product.category}</p>
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* Common fields for both types */}
-            {(product.actual_image_width || product.actual_image_height) && (
+            {!isVisualMatch(product) && product.date && (
               <div>
-                <h3 className="font-medium text-gray-700">Image Dimensions</h3>
-                <p>
-                  {product.actual_image_width || "N/A"} x{" "}
-                  {product.actual_image_height || "N/A"}
-                </p>
+                <h3 className="font-medium text-gray-700">Date</h3>
+                <p>{product.date}</p>
               </div>
             )}
-
-            {/* Additional metadata if available */}
-            {product.metadata && Object.keys(product.metadata).length > 0 && (
-              <div>
-                <h3 className="font-medium text-gray-700">
-                  Additional Details
-                </h3>
-                <div className="space-y-1">
-                  {Object.entries(product.metadata).map(([key, value]) => (
-                    <div key={key} className="grid grid-cols-2">
-                      <span className="text-gray-500 capitalize">
-                        {key.replace("_", " ")}
-                      </span>
-                      <span>{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Related searches for Visual Matches */}
-            {isVisualMatch(product) &&
-              product.related_searches &&
-              product.related_searches.length > 0 && (
-                <div>
-                  <h3 className="font-medium text-gray-700">
-                    Related Searches
-                  </h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    {product.related_searches.map((search, idx) => (
-                      <li key={idx}>
-                        <a
-                          href={search.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          {search.query}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
             {product.link && (
               <div className="pt-4">
@@ -248,7 +155,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                   rel="noopener noreferrer"
                   className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                 >
-                  Visit Product Page
+                  Visit Page
                 </a>
               </div>
             )}
